@@ -8,7 +8,7 @@
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::peek() {
     if (m_last_peek.first == TokenTypes::EMPTY) {
         m_last_peek = m_lexer.next_token();
-        printf("TokenID %i token value: \"%s\"\n", m_last_peek.first, std::string(m_last_peek.second).c_str());
+        logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), LogLevel::TRACE);
         fflush(stdout);
     }
     return m_last_peek;
@@ -20,7 +20,7 @@ ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::advance() {
         return result;
     }
     auto token = m_lexer.next_token();
-    printf("TokenID %i token value: \"%s\"\n", token.first, std::string(token.second).c_str());
+    logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), LogLevel::TRACE);
     fflush(stdout);
     return token;
 }
@@ -36,7 +36,7 @@ ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::expect(ValveKeyVal
         logger_function(std::format("Trying to recover from unexpected token {}:\"{}\", expected {} at {}:{}",
                                     (uint32_t) token.first, token.second, (uint32_t) type, m_lexer.m_line, m_lexer.m_column),
                         LogLevel::WARN);
-        while (!match(TokenTypes::NEWLINE) || match(TokenTypes::END_OF_FILE)) advance();
+        try_to_recover();
         return {TokenTypes::INVALID, ""sv};
     }
     advance();
@@ -55,17 +55,26 @@ void ValveKeyValueFormat::KVParser::parse() {
                     m_node_stack.back()->add_branch(new_branch);
                 }
                 m_node_stack.emplace_back(new_branch);
+                skip_comments();
+                if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
+                    logger_function("Missing new line!", LogLevel::ERROR);
+                }
             } else if (match(TokenTypes::STRING)) {
                 auto value = advance();
-                if (match(TokenTypes::STRING)) {
+                if (match(TokenTypes::LBRACKET, true)) {
                     auto condition = expect(TokenTypes::STRING);
                     if (condition.first == TokenTypes::INVALID) break;
+                    if (expect(TokenTypes::RBRACKET).first == TokenTypes::INVALID) break;
 
                     auto leaf = std::make_shared<KVLeaf>(key.second, value.second, condition.second);
                     m_node_stack.back()->add_branch(leaf);
                 } else {
                     auto leaf = std::make_shared<KVLeaf>(key.second, value.second);
                     m_node_stack.back()->add_branch(leaf);
+                }
+                skip_comments();
+                if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
+                    logger_function("Missing new line!", LogLevel::ERROR);
                 }
             }
         } else if (match(TokenTypes::RBRACE, true)) {
@@ -74,8 +83,8 @@ void ValveKeyValueFormat::KVParser::parse() {
             break;
         else {
             auto unexpected = advance();
-            logger_function(std::format("Unexpected token {}:\"{}\" at {}:{}", (uint32_t) unexpected.first, unexpected.second, m_lexer.m_line, m_lexer.m_column), LogLevel::ERROR);
-            break;
+            logger_function(std::format("Unexpected token {}:\"{}\" at {}:{}", (uint32_t) unexpected.first, unexpected.second, m_lexer.m_line, m_lexer.m_column), LogLevel::WARN);
+            try_to_recover();
         }
     }
 }

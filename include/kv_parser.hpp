@@ -33,6 +33,17 @@ namespace ValveKeyValueFormat {
             while (match(TokenTypes::NEWLINE, false) || match(TokenTypes::INVALID) || match(TokenTypes::COMMENT))
                 advance();
         }
+        inline void skip_comments() {
+            while (match(TokenTypes::INVALID) || match(TokenTypes::COMMENT))
+                advance();
+        }
+        inline void try_to_recover() {
+            while (true) {
+                if (match(TokenTypes::NEWLINE)) break;
+                if (match(TokenTypes::END_OF_FILE)) break;
+                advance();
+            };
+        }
 
     public:
         explicit KVParser(std::string_view buffer) : m_lexer(buffer){};

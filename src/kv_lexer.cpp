@@ -36,7 +36,7 @@ std::string_view ValveKeyValueFormat::KVLexer::read_simple_string(std::string_vi
             logger_function(std::format("Unexpected char \"{}\" in unquoted string at {}:{}", symbol, m_line + 1, m_column), LogLevel::WARN);
             break;
         }
-        if (!isprint(symbol)) break;
+        if (!isprint(symbol) || symbol == '[' || symbol == ']' || symbol == '{' || symbol == '}') break;
         advance();
     }
 
@@ -65,6 +65,7 @@ std::string_view ValveKeyValueFormat::KVLexer::read_quoted_string() {
     }
     return trim(m_buffer.substr(string_start, string_end - string_start));
 }
+
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVLexer::next_token() {
     char symbol = this->symbol();
     while (isspace(symbol) && symbol != '\n') {
@@ -77,13 +78,21 @@ ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVLexer::next_token() {
     } else if (symbol == '/' && next_symbol() == '/') {
         advance();
         advance();
-        return {ValveKeyValueFormat::TokenTypes::COMMENT, read_simple_string("\n{"sv)};
+        read_simple_string("\n{"sv);
+        return next_token();
+        //        return {ValveKeyValueFormat::TokenTypes::COMMENT, read_simple_string("\n{"sv)};
     } else if (symbol == '{') {
         advance();
         return {ValveKeyValueFormat::TokenTypes::LBRACE, "{"};
     } else if (symbol == '}') {
         advance();
         return {ValveKeyValueFormat::TokenTypes::RBRACE, "}"};
+    } else if (symbol == '[') {
+        advance();
+        return {ValveKeyValueFormat::TokenTypes::LBRACKET, "["};
+    } else if (symbol == ']') {
+        advance();
+        return {ValveKeyValueFormat::TokenTypes::RBRACKET, "]"};
     } else if (symbol == '"' || symbol == '\'') {
         if (next_symbol() == '"' || next_symbol() == '\'') {
             advance();
@@ -91,12 +100,11 @@ ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVLexer::next_token() {
             return {ValveKeyValueFormat::TokenTypes::STRING, ""sv};
         }
         auto string = read_quoted_string();
-        if (string.empty()) return {ValveKeyValueFormat::TokenTypes::INVALID, ""sv};
+        if (string.empty()) return next_token();;
         return {TokenTypes::STRING, string};
     } else if (isprint(symbol)) {
         return {TokenTypes::STRING, read_simple_string(" \t\n"sv)};
     }
-
 
     return {TokenTypes::END_OF_FILE, "EOF"sv};
 }

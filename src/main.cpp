@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
                     "{ //second comment m_line\n"
                     "    $key\"  \"value\n"
                     "    \"$key1\"  \"value1'\n"
-                    "    \"$key2\"  \"value1\"\n"
+                    "    \"$key2\"  \"value1\" //Comment   \n"
                     "    \"$key3\"  \"value2`\n"
                     "    \"$key4\"  \"value3\"  [!PS3]\n"
                     "    \"$key4\"  \"value5342\"  [PS3]\n"
@@ -40,14 +40,6 @@ int main(int argc, char** argv) {
                     "    \n"
                     "    }\n"
                     "}"sv;
-    //    auto lexer = ValveKeyValueFormat::KVLexer(test_vmt);
-    //    ValveKeyValueFormat::TokenPair token;
-    //    do {
-    //        token = lexer.next_token();
-    //
-    //        printf("TokenID %i token value: \"%s\"\n", token.first, std::string(token.second).c_str());
-    //        fflush(stdout);
-    //    } while (token.first != ValveKeyValueFormat::TokenTypes::END_OF_FILE);
     auto parser = ValveKeyValueFormat::KVParser(test_vmt);
     parser.parse();
     auto root = parser.root()->as_branch();

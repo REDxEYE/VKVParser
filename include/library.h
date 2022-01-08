@@ -6,7 +6,7 @@
 #include "kv_node.hpp"
 #include "shared.hpp"
 
-std::shared_ptr<KVNode> parseKVBuffer(const std::string& buffer);
-void setLogCallback(LoggerFunction* loggerFunction);
+LIBRARY_API std::shared_ptr<KVNode> parseKVBuffer(const std::string& buffer);
+LIBRARY_API void setLogCallback(LoggerFunction* loggerFunction);
 
 #endif//KVPARSER_LIBRARY_H

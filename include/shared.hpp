@@ -31,4 +31,10 @@ inline std::string_view trim(std::string_view in) {
     return in.substr(left, right-left);
 }
 
+#ifdef _WIN32
+#    define LIBRARY_API __declspec(dllexport)
+#elif
+#    define LIBRARY_API
+#endif
+
 #endif//KVPARSER_SHARED_HPP
