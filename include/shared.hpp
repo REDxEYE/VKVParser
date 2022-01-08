@@ -2,8 +2,8 @@
 // Created by MED45 on 07.01.2022.
 //
 
-#ifndef VMTPARSER_SHARED_HPP
-#define VMTPARSER_SHARED_HPP
+#ifndef KVPARSER_SHARED_HPP
+#define KVPARSER_SHARED_HPP
 
 enum class LogLevel {
     ALL = 0,
@@ -31,4 +31,4 @@ inline std::string_view trim(std::string_view in) {
     return in.substr(left, right-left);
 }
 
-#endif//VMTPARSER_SHARED_HPP
+#endif//KVPARSER_SHARED_HPP

@@ -1,8 +1,8 @@
 
-#include "vmt_lexer.hpp"
+#include "kv_lexer.hpp"
+#include <kv_parser.hpp>
 #include <shared.hpp>
 #include <string>
-#include <vmt_parser.hpp>
 
 using namespace std::literals;
 
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
                     "    \n"
                     "    }\n"
                     "}"sv;
-    //    auto lexer = ValveKeyValueFormat::VmtLexer(test_vmt);
+    //    auto lexer = ValveKeyValueFormat::KVLexer(test_vmt);
     //    ValveKeyValueFormat::TokenPair token;
     //    do {
     //        token = lexer.next_token();
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     //        printf("TokenID %i token value: \"%s\"\n", token.first, std::string(token.second).c_str());
     //        fflush(stdout);
     //    } while (token.first != ValveKeyValueFormat::TokenTypes::END_OF_FILE);
-    auto parser = ValveKeyValueFormat::VmtParser(test_vmt);
+    auto parser = ValveKeyValueFormat::KVParser(test_vmt);
     parser.parse();
     auto root = parser.root()->as_branch();
     auto key4 = root->get("$key4");

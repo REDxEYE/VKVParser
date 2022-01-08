@@ -2,15 +2,15 @@
 // Created by MED45 on 07.01.2022.
 //
 
-#ifndef VMTPARSER_VMT_LEXER_HPP
-#define VMTPARSER_VMT_LEXER_HPP
+#ifndef KVPARSER_KV_LEXER_HPP
+#define KVPARSER_KV_LEXER_HPP
 
-#include "vmt_node.hpp"
+#include "kv_node.hpp"
 #include <string>
 #include <vector>
 
 namespace ValveKeyValueFormat {
-    class VmtParser;
+    class KVParser;
     enum class TokenTypes {
         EMPTY = -1,
         INVALID = 0,
@@ -30,7 +30,7 @@ namespace ValveKeyValueFormat {
 
     using TokenPair = std::pair<ValveKeyValueFormat::TokenTypes, std::string_view>;
 
-    class VmtLexer {
+    class KVLexer {
     private:
         std::string_view m_buffer;
         uint32_t m_offset = 0;
@@ -51,13 +51,13 @@ namespace ValveKeyValueFormat {
 
         inline std::string_view read_simple_string(std::string_view terminators);
         inline std::string_view read_quoted_string();
-        friend VmtParser;
+        friend KVParser;
 
     public:
-        explicit VmtLexer(const std::string& buffer) {
+        explicit KVLexer(const std::string& buffer) {
             this->m_buffer = std::string_view(buffer);
         }
-        explicit VmtLexer(std::string_view buffer) {
+        explicit KVLexer(std::string_view buffer) {
             this->m_buffer = buffer;
         }
 
@@ -66,4 +66,4 @@ namespace ValveKeyValueFormat {
 }// namespace ValveKeyValueFormat
 
 
-#endif//VMTPARSER_VMT_LEXER_HPP
+#endif//KVPARSER_KV_LEXER_HPP

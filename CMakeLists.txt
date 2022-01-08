@@ -1,24 +1,24 @@
 cmake_minimum_required(VERSION 3.20)
-project(VMTParser)
+project(KVParser)
 
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(./include)
 
 
-set(VMTParserSRC
+set(KVParserSRC
         src/library.cpp
-        src/vmt_node.cpp
-        include/vmt_lexer.cpp
-        include/vmt_parser.cpp
+        src/kv_node.cpp
+        src/kv_lexer.cpp
+        src/kv_parser.cpp
         )
 
-set(VMTParserTestSRC
+set(KVParserTestSRC
         src/main.cpp
-        src/vmt_node.cpp
-        include/vmt_lexer.cpp
-        include/vmt_parser.cpp
+        src/kv_node.cpp
+        src/kv_lexer.cpp
+        src/kv_parser.cpp
         )
 
-add_library(VMTParser SHARED ${VMTParserSRC})
-add_executable(VMTParserTest ${VMTParserTestSRC})
+add_library(KVParser SHARED ${KVParserSRC})
+add_executable(KVParserTest ${KVParserTestSRC})

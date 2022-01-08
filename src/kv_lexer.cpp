@@ -3,8 +3,8 @@
 //
 #include <format>
 
+#include "kv_lexer.hpp"
 #include "shared.hpp"
-#include "vmt_lexer.hpp"
 
 using namespace std::literals;
 
@@ -12,7 +12,7 @@ using namespace std::literals;
 const std::string_view valid_escapes{"\\'\"ntr"};
 const std::string_view invalid_unquoted_chars{"\"'"};
 
-char ValveKeyValueFormat::VmtLexer::advance() {
+char ValveKeyValueFormat::KVLexer::advance() {
     char symbol = this->symbol();
     if (symbol) {
         if (symbol == '\r' && next_symbol() == '\n') m_offset++;
@@ -27,7 +27,7 @@ char ValveKeyValueFormat::VmtLexer::advance() {
     return symbol;
 }
 
-std::string_view ValveKeyValueFormat::VmtLexer::read_simple_string(std::string_view terminators) {
+std::string_view ValveKeyValueFormat::KVLexer::read_simple_string(std::string_view terminators) {
     uint32_t string_start = m_offset;
     while (true) {
         char symbol = this->symbol();
@@ -44,7 +44,7 @@ std::string_view ValveKeyValueFormat::VmtLexer::read_simple_string(std::string_v
     return trim(view);
 }
 
-std::string_view ValveKeyValueFormat::VmtLexer::read_quoted_string() {
+std::string_view ValveKeyValueFormat::KVLexer::read_quoted_string() {
     char terminator = advance();
     uint32_t string_start = m_offset;
     uint32_t string_end = m_offset;
@@ -65,7 +65,7 @@ std::string_view ValveKeyValueFormat::VmtLexer::read_quoted_string() {
     }
     return trim(m_buffer.substr(string_start, string_end - string_start));
 }
-ValveKeyValueFormat::TokenPair ValveKeyValueFormat::VmtLexer::next_token() {
+ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVLexer::next_token() {
     char symbol = this->symbol();
     while (isspace(symbol) && symbol != '\n') {
         advance();

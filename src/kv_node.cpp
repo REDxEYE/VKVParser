@@ -2,13 +2,13 @@
 // Created by MED45 on 07.01.2022.
 //
 
-#include "vmt_node.hpp"
-VmtLeaf* VmtNode::as_leaf() {
-    if (type == VmtNodeType::LEAF) return static_cast<VmtLeaf*>(this);
+#include "kv_node.hpp"
+KVLeaf* KVNode::as_leaf() {
+    if (type == KVNodeType::LEAF) return static_cast<KVLeaf*>(this);
     return nullptr;
 }
 
-VmtBranch* VmtNode::as_branch() {
-    if (type == VmtNodeType::BRANCH) return static_cast<VmtBranch*>(this);
+KVBranch* KVNode::as_branch() {
+    if (type == KVNodeType::BRANCH) return static_cast<KVBranch*>(this);
     return nullptr;
 }

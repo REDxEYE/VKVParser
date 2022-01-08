@@ -2,8 +2,8 @@
 // Created by MED45 on 08.01.2022.
 //
 
-#ifndef VMTPARSER_VMT_PARSER_HPP
-#define VMTPARSER_VMT_PARSER_HPP
+#ifndef KVPARSER_KV_PARSER_HPP
+#define KVPARSER_KV_PARSER_HPP
 
 #include <string>
 
@@ -16,13 +16,13 @@ namespace ValveKeyValueFormat {
 
     static TokenPair EmptyPeek = {TokenTypes::EMPTY, ""sv};
 
-    class VmtParser {
-        VmtLexer m_lexer;
-        std::shared_ptr<VmtBranch> m_root = nullptr;
+    class KVParser {
+        KVLexer m_lexer;
+        std::shared_ptr<KVBranch> m_root = nullptr;
 
         TokenPair m_last_peek = EmptyPeek;
 
-        std::vector<std::shared_ptr<VmtBranch>> m_node_stack;
+        std::vector<std::shared_ptr<KVBranch>> m_node_stack;
 
         TokenPair peek();
         TokenPair advance();
@@ -35,11 +35,11 @@ namespace ValveKeyValueFormat {
         }
 
     public:
-        explicit VmtParser(std::string_view buffer) : m_lexer(buffer){};
+        explicit KVParser(std::string_view buffer) : m_lexer(buffer){};
         void parse();
-        inline std::shared_ptr<VmtNode> root() { return m_root; }
+        inline std::shared_ptr<KVNode> root() { return m_root; }
     };
 }// namespace ValveKeyValueFormat
 
 
-#endif//VMTPARSER_VMT_PARSER_HPP
+#endif//KVPARSER_KV_PARSER_HPP

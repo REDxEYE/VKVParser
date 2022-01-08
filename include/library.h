@@ -1,12 +1,12 @@
-#ifndef VMTPARSER_LIBRARY_H
-#define VMTPARSER_LIBRARY_H
+#ifndef KVPARSER_LIBRARY_H
+#define KVPARSER_LIBRARY_H
 #include <memory>
 #include <string>
 
+#include "kv_node.hpp"
 #include "shared.hpp"
-#include "vmt_node.hpp"
 
-std::shared_ptr<VmtNode> parseVmtBuffer(const std::string& buffer);
+std::shared_ptr<KVNode> parseKVBuffer(const std::string& buffer);
 void setLogCallback(LoggerFunction* loggerFunction);
 
-#endif//VMTPARSER_LIBRARY_H
+#endif//KVPARSER_LIBRARY_H
