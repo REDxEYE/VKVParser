@@ -3,8 +3,8 @@
 //
 #include <format>
 
-#include "kv_lexer.hpp"
-#include "shared.hpp"
+#include "VKVParser/kv_lexer.hpp"
+#include "VKVParser/shared.hpp"
 
 using namespace std::literals;
 

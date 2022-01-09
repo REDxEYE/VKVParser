@@ -2,7 +2,7 @@
 // Created by MED45 on 07.01.2022.
 //
 
-#include "kv_node.hpp"
+#include "VKVParser/kv_node.hpp"
 KVLeaf* KVNode::as_leaf() {
     if (type == KVNodeType::LEAF) return static_cast<KVLeaf*>(this);
     return nullptr;

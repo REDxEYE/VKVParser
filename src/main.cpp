@@ -1,7 +1,7 @@
 
-#include "kv_lexer.hpp"
-#include <kv_parser.hpp>
-#include <shared.hpp>
+#include "VKVParser/kv_lexer.hpp"
+#include <VKVParser/kv_parser.hpp>
+#include <VKVParser/shared.hpp>
 #include <string>
 
 using namespace std::literals;

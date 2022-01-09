@@ -2,8 +2,8 @@
 // Created by MED45 on 08.01.2022.
 //
 
-#include "kv_parser.hpp"
-#include "shared.hpp"
+#include "VKVParser/kv_parser.hpp"
+#include "VKVParser/shared.hpp"
 #include <format>
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::peek() {
     if (m_last_peek.first == TokenTypes::EMPTY) {

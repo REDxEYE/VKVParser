@@ -1,6 +1,6 @@
-#include "library.h"
+#include "VKVParser/library.h"
+#include <VKVParser/kv_parser.hpp>
 #include <cstdio>
-#include <kv_parser.hpp>
 
 LoggerFunction* logger_function = [](const std::string& message, LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str()); };
 
