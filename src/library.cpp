@@ -6,7 +6,7 @@ namespace ValveKeyValueFormat {
 	ValveKeyValueFormat::LoggerFunction logger_function = [](const std::string& message, ValveKeyValueFormat::LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str()); };
 };
 
-LIBRARY_API std::shared_ptr<KVNode> parseKVBuffer(const std::string& buffer) {
+LIBRARY_API std::shared_ptr<ValveKeyValueFormat::KVNode> ValveKeyValueFormat::parseKVBuffer(const std::string& buffer) {
     auto parser = ValveKeyValueFormat::KVParser(buffer);
     parser.parse();
     return parser.root();

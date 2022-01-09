@@ -6,6 +6,7 @@
 #define KVPARSER_SHARED_HPP
 
 #include <functional>
+#include <cctype>
 
 namespace ValveKeyValueFormat {
 	enum class LogLevel {
