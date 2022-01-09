@@ -10,7 +10,7 @@ enum class LogLevel {
     TRACE = 1,
     DEBUG = 2,
     WARN = 3,
-    ERROR = 4,
+    ERR = 4,
 };
 
 typedef void LoggerFunction(const std::string& message, LogLevel severity);

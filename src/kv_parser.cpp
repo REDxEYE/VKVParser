@@ -63,7 +63,7 @@ void ValveKeyValueFormat::KVParser::parse() {
                 m_node_stack.emplace_back(new_branch);
                 skip_comments();
                 if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
-                    logger_function("Missing new line!", LogLevel::ERROR);
+                    logger_function("Missing new line!", LogLevel::ERR);
                 }
             } else if (match(TokenTypes::STRING)) {
                 auto value = advance();
@@ -80,7 +80,7 @@ void ValveKeyValueFormat::KVParser::parse() {
                 }
                 skip_comments();
                 if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
-                    logger_function("Missing new line!", LogLevel::ERROR);
+                    logger_function("Missing new line!", LogLevel::ERR);
                 }
             }
         } else if (match(TokenTypes::RBRACE, true)) {
