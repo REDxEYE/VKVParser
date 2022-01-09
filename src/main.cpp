@@ -44,7 +44,11 @@ int main(int argc, char** argv) {
     parser.parse();
     auto root = parser.root()->as_branch();
     auto key4 = root->get("$key4");
+    if (key4) printf("LOWCASE %s\n", key4->as_leaf()->value.c_str());
+    key4 = root->get("$KEY4");
+    if (key4) printf("UPCASE %s\n", key4->as_leaf()->value.c_str());
     auto keyNo = root->get("$key4123");
+    if (keyNo) printf("UPCASE %s\n", key4->as_leaf()->value.c_str());
     key4->get_key();
     return 0;
 }

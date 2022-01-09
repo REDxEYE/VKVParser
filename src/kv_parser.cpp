@@ -3,8 +3,9 @@
 //
 
 #include "VKVParser/kv_parser.hpp"
-#include "VKVParser/shared.hpp"
+#include <algorithm>
 #include <format>
+#include <string>
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::peek() {
     if (m_last_peek.first == TokenTypes::EMPTY) {
         m_last_peek = m_lexer.next_token();
@@ -47,6 +48,9 @@ void ValveKeyValueFormat::KVParser::parse() {
         skip_newlines();
         if (match(TokenTypes::STRING)) {
             auto key = advance();
+            std::string tkey = std::string(key.second);
+            to_lower(tkey);
+
             skip_newlines();
             if (match(TokenTypes::LBRACE, true)) {
                 auto new_branch = std::make_shared<KVBranch>(key.second);
@@ -66,10 +70,10 @@ void ValveKeyValueFormat::KVParser::parse() {
                     if (condition.first == TokenTypes::INVALID) break;
                     if (expect(TokenTypes::RBRACKET).first == TokenTypes::INVALID) break;
 
-                    auto leaf = std::make_shared<KVLeaf>(key.second, value.second, condition.second);
+                    auto leaf = std::make_shared<KVLeaf>(tkey, value.second, condition.second);
                     m_node_stack.back()->add_branch(leaf);
                 } else {
-                    auto leaf = std::make_shared<KVLeaf>(key.second, value.second);
+                    auto leaf = std::make_shared<KVLeaf>(tkey, value.second);
                     m_node_stack.back()->add_branch(leaf);
                 }
                 skip_comments();
