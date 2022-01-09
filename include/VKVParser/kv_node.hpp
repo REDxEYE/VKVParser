@@ -63,7 +63,7 @@ public:
 
     std::shared_ptr<KVNode> get(const std::string& key) {
         std::string normalized_key = key;
-        normalized_key = to_lower(normalized_key);
+        normalized_key = ValveKeyValueParser::to_lower(normalized_key);
         auto result = branches.find(normalized_key);
         if (result == branches.end()) { return nullptr; }
         return result->second;
