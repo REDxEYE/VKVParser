@@ -5,7 +5,7 @@
 
 using namespace std::literals;
 
-ValveKeyValueParser::LoggerFunction* ValveKeyValueParser::logger_function = [](const std::string& message, ValveKeyValueParser::LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str());fflush(stderr); };
+ValveKeyValueFormat::LoggerFunction* ValveKeyValueFormat::logger_function = [](const std::string& message, ValveKeyValueFormat::LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str());fflush(stderr); };
 
 int main(int argc, char** argv) {
     auto test_vmt = "\n"

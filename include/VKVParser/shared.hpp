@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace ValveKeyValueParser {
+namespace ValveKeyValueFormat {
     enum class LogLevel {
         ALL = 0,
         TRACE = 1,

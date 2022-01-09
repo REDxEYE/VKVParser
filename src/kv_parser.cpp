@@ -9,7 +9,7 @@
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::peek() {
     if (m_last_peek.first == TokenTypes::EMPTY) {
         m_last_peek = m_lexer.next_token();
-        ValveKeyValueParser::logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), ValveKeyValueParser::LogLevel::TRACE);
+        ValveKeyValueFormat::logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), ValveKeyValueFormat::LogLevel::TRACE);
         fflush(stdout);
     }
     return m_last_peek;
@@ -21,7 +21,7 @@ ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::advance() {
         return result;
     }
     auto token = m_lexer.next_token();
-    ValveKeyValueParser::logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), ValveKeyValueParser::LogLevel::TRACE);
+    ValveKeyValueFormat::logger_function(std::format("TokenID {} token value: \"{}\"", (uint32_t) m_last_peek.first, m_last_peek.second), ValveKeyValueFormat::LogLevel::TRACE);
     fflush(stdout);
     return token;
 }
@@ -34,9 +34,9 @@ bool ValveKeyValueFormat::KVParser::match(ValveKeyValueFormat::TokenTypes type, 
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVParser::expect(ValveKeyValueFormat::TokenTypes type) {
     auto token = peek();
     if (token.first != type) {
-        ValveKeyValueParser::logger_function(std::format("Trying to recover from unexpected token {}:\"{}\", expected {} at {}:{}",
+        ValveKeyValueFormat::logger_function(std::format("Trying to recover from unexpected token {}:\"{}\", expected {} at {}:{}",
                                     (uint32_t) token.first, token.second, (uint32_t) type, m_lexer.m_line, m_lexer.m_column),
-                        ValveKeyValueParser::LogLevel::WARN);
+                                             ValveKeyValueFormat::LogLevel::WARN);
         try_to_recover();
         return {TokenTypes::INVALID, ""sv};
     }
@@ -49,7 +49,7 @@ void ValveKeyValueFormat::KVParser::parse() {
         if (match(TokenTypes::STRING)) {
             auto key = advance();
             std::string tkey = std::string(key.second);
-            ValveKeyValueParser::to_lower(tkey);
+            ValveKeyValueFormat::to_lower(tkey);
 
             skip_newlines();
             if (match(TokenTypes::LBRACE, true)) {
@@ -61,7 +61,7 @@ void ValveKeyValueFormat::KVParser::parse() {
                 m_node_stack.emplace_back(new_branch);
                 skip_comments();
                 if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
-                    ValveKeyValueParser::logger_function("Missing new line!", ValveKeyValueParser::LogLevel::ERROR);
+                    ValveKeyValueFormat::logger_function("Missing new line!", ValveKeyValueFormat::LogLevel::ERROR);
                 }
             } else if (match(TokenTypes::STRING)) {
                 auto value = advance();
@@ -78,7 +78,7 @@ void ValveKeyValueFormat::KVParser::parse() {
                 }
                 skip_comments();
                 if (expect(TokenTypes::NEWLINE).first == TokenTypes::INVALID) {
-                    ValveKeyValueParser::logger_function("Missing new line!", ValveKeyValueParser::LogLevel::ERROR);
+                    ValveKeyValueFormat::logger_function("Missing new line!", ValveKeyValueFormat::LogLevel::ERROR);
                 }
             }
         } else if (match(TokenTypes::RBRACE, true)) {
@@ -87,7 +87,7 @@ void ValveKeyValueFormat::KVParser::parse() {
             break;
         else {
             auto unexpected = advance();
-            ValveKeyValueParser::logger_function(std::format("Unexpected token {}:\"{}\" at {}:{}", (uint32_t) unexpected.first, unexpected.second, m_lexer.m_line, m_lexer.m_column), ValveKeyValueParser::LogLevel::WARN);
+            ValveKeyValueFormat::logger_function(std::format("Unexpected token {}:\"{}\" at {}:{}", (uint32_t) unexpected.first, unexpected.second, m_lexer.m_line, m_lexer.m_column), ValveKeyValueFormat::LogLevel::WARN);
             try_to_recover();
         }
     }

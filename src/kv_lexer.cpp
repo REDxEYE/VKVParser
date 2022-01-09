@@ -32,7 +32,7 @@ std::string_view ValveKeyValueFormat::KVLexer::read_simple_string(std::string_vi
         char symbol = this->symbol();
         if (terminators.find(symbol) != -1) break;
         if (invalid_unquoted_chars.find(symbol) != -1) {
-            ValveKeyValueParser::logger_function(std::format("Unexpected char \"{}\" in unquoted string at {}:{}", symbol, m_line + 1, m_column), ValveKeyValueParser::LogLevel::WARN);
+            ValveKeyValueFormat::logger_function(std::format("Unexpected char \"{}\" in unquoted string at {}:{}", symbol, m_line + 1, m_column), ValveKeyValueFormat::LogLevel::WARN);
             break;
         }
         if (!isprint(symbol) || symbol == '[' || symbol == ']' || symbol == '{' || symbol == '}') break;
@@ -40,7 +40,7 @@ std::string_view ValveKeyValueFormat::KVLexer::read_simple_string(std::string_vi
     }
 
     auto view = m_buffer.substr(string_start, m_offset - string_start);
-    return ValveKeyValueParser::trim(view);
+    return ValveKeyValueFormat::trim(view);
 }
 
 std::string_view ValveKeyValueFormat::KVLexer::read_quoted_string() {
@@ -58,11 +58,11 @@ std::string_view ValveKeyValueFormat::KVLexer::read_quoted_string() {
 
     if (symbol() != terminator) {
         if (symbol() != '\n') advance();
-        ValveKeyValueParser::logger_function(std::format(R"(Expected "{}", but got "{}" at {}:{})", terminator, symbol(), m_line + 1, m_column), ValveKeyValueParser::LogLevel::WARN);
+        ValveKeyValueFormat::logger_function(std::format(R"(Expected "{}", but got "{}" at {}:{})", terminator, symbol(), m_line + 1, m_column), ValveKeyValueFormat::LogLevel::WARN);
     } else {
         advance();
     }
-    return ValveKeyValueParser::trim(m_buffer.substr(string_start, string_end - string_start));
+    return ValveKeyValueFormat::trim(m_buffer.substr(string_start, string_end - string_start));
 }
 
 ValveKeyValueFormat::TokenPair ValveKeyValueFormat::KVLexer::next_token() {
