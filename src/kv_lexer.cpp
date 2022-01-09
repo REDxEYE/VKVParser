@@ -1,7 +1,7 @@
 //
 // Created by MED45 on 07.01.2022.
 //
-#include <format>
+#include <sstream>
 
 #include "VKVParser/kv_lexer.hpp"
 #include "VKVParser/shared.hpp"
@@ -33,7 +33,9 @@ std::string_view ValveKeyValueFormat::KVLexer::read_simple_string(std::string_vi
         char symbol = this->symbol();
         if (terminators.find(symbol) != -1) break;
         if (invalid_unquoted_chars.find(symbol) != -1) {
-            logger_function(std::format("Unexpected char \"{}\" in unquoted string at {}:{}", symbol, m_line + 1, m_column), LogLevel::WARN);
+			std::stringstream log_msg;
+			log_msg<<"Unexpected char \""<<symbol<<"\" in unquoted string at "<<(m_line +1)<<":"<<m_column;
+            logger_function(log_msg.str(), LogLevel::WARN);
             break;
         }
         if (!isprint(symbol) || symbol == '[' || symbol == ']' || symbol == '{' || symbol == '}') break;
@@ -59,7 +61,9 @@ std::string_view ValveKeyValueFormat::KVLexer::read_quoted_string() {
 
     if (symbol() != terminator) {
         if (symbol() != '\n') advance();
-        logger_function(std::format(R"(Expected "{}", but got "{}" at {}:{})", terminator, symbol(), m_line + 1, m_column), LogLevel::WARN);
+		std::stringstream log_msg;
+		log_msg<<"(Expected \""<<terminator<<"\", but got \""<<symbol()<<"\" at "<<(m_line + 1)<<":"<<m_column<<")";
+        logger_function(log_msg.str(), LogLevel::WARN);
     } else {
         advance();
     }
