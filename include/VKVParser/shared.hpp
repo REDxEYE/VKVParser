@@ -5,6 +5,8 @@
 #ifndef KVPARSER_SHARED_HPP
 #define KVPARSER_SHARED_HPP
 
+#include <functional>
+
 enum class LogLevel {
     ALL = 0,
     TRACE = 1,
@@ -13,8 +15,8 @@ enum class LogLevel {
     ERR = 4,
 };
 
-typedef void LoggerFunction(const std::string& message, LogLevel severity);
-extern LoggerFunction* logger_function;
+using LoggerFunction = std::function<void(const std::string& message, LogLevel severity)>;
+extern LoggerFunction logger_function;
 
 
 inline std::string_view trim(std::string_view in) {
