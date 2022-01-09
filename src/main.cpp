@@ -1,12 +1,12 @@
 
-#include "kv_lexer.hpp"
-#include <kv_parser.hpp>
-#include <shared.hpp>
+#include "VKVParser/kv_lexer.hpp"
+#include <VKVParser/kv_parser.hpp>
+#include <VKVParser/shared.hpp>
 #include <string>
 
 using namespace std::literals;
 
-LoggerFunction* logger_function = [](const std::string& message, LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str());fflush(stderr); };
+ValveKeyValueFormat::LoggerFunction ValveKeyValueFormat::logger_function = [](const std::string& message, ValveKeyValueFormat::LogLevel severity) -> void { fprintf(stderr, "%s\n", message.c_str());fflush(stderr); };
 
 int main(int argc, char** argv) {
     auto test_vmt = "\n"

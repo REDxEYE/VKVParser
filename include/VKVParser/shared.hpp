@@ -7,31 +7,33 @@
 
 #include <functional>
 
-enum class LogLevel {
-    ALL = 0,
-    TRACE = 1,
-    DEBUG = 2,
-    WARN = 3,
-    ERR = 4,
+namespace ValveKeyValueFormat {
+	enum class LogLevel {
+		ALL = 0,
+		TRACE = 1,
+		DEBUG = 2,
+		WARN = 3,
+		ERR = 4,
+	};
+
+	using LoggerFunction = std::function<void(const std::string& message, LogLevel severity)>;
+	extern LoggerFunction logger_function;
+
+
+	inline std::string_view trim(std::string_view in) {
+		uint32_t left = 0;
+		for (;; ++left) {
+			if (left == in.length())
+				return {};
+			if (!isspace(in[left]))
+				break;
+		}
+		auto right = in.length();
+		for (; right > left && isspace(in[right-1]); --right) {};
+
+		return in.substr(left, right-left);
+	}
 };
-
-using LoggerFunction = std::function<void(const std::string& message, LogLevel severity)>;
-extern LoggerFunction logger_function;
-
-
-inline std::string_view trim(std::string_view in) {
-    uint32_t left = 0;
-    for (;; ++left) {
-        if (left == in.length())
-            return {};
-        if (!isspace(in[left]))
-            break;
-    }
-    auto right = in.length();
-    for (; right > left && isspace(in[right-1]); --right) {};
-
-    return in.substr(left, right-left);
-}
 
 #ifdef _WIN32
 #    define LIBRARY_API __declspec(dllexport)
